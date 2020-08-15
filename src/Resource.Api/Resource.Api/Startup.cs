@@ -26,15 +26,15 @@ namespace Resource.Api
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                
             }).AddJwtBearer(o =>
             {
-                o.Authority = "http://localhost:5000";
+                o.Authority = "https://sts.sapico.me";
                 o.Audience = "resourceapi";
                 o.RequireHttpsMetadata = false;
             });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
-                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+                options.AddPolicy("CommerceFrameworkApi", policy => policy.RequireClaim("scope", "commerce_framework_api"));
+           //     options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
