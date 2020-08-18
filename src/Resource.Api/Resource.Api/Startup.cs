@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using System.Security.Claims;
 
 namespace Resource.Api
@@ -26,8 +27,11 @@ namespace Resource.Api
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                
             }).AddJwtBearer(o =>
             {
+                o.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+                //alternative: you can change where you create the claim (sts.sapico.me) and name it as ASP.NET's default, or you can even add a duplicate claim to satisfy both naming.
+
                 o.Authority = "https://sts.sapico.me";
-                o.Audience = "resourceapi";
+                o.Audience = "https://sts.sapico.me/resources";
                 o.RequireHttpsMetadata = false;
             });
 
@@ -45,6 +49,7 @@ namespace Resource.Api
         {
             if (env.IsDevelopment())
             {
+                IdentityModelEventSource.ShowPII = true; //for error details. don't use in production.
                 app.UseDeveloperExceptionPage();
             }
 
